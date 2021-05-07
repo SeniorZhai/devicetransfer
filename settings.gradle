@@ -1,0 +1,8 @@
+include ':core-util'
+include ':device-transfer'
+include ':device-transfer-app'
+
+project(':device-transfer').projectDir = file('device-transfer/lib')
+project(':device-transfer-app').projectDir = file('device-transfer/app')
+
+rootProject.name='Signal'
