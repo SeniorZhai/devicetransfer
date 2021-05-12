@@ -53,11 +53,13 @@ final class DeviceTransferClient implements Handler.Callback {
   public DeviceTransferClient(@NonNull Context context,
                               @NonNull ClientTask clientTask,
                               @NonNull String ipAddress,
+                              int ipPort,
                               @Nullable ShutdownCallback shutdownCallback)
   {
     this.context                 = context;
     this.clientTask              = clientTask;
     this.ipAddress = ipAddress;
+    this.remotePort = ipPort;
     this.shutdownCallback        = shutdownCallback;
     this.commandAndControlThread = SignalExecutors.getAndStartHandlerThread("client-cnc");
     this.handler                 = new Handler(commandAndControlThread.getLooper(), this);
@@ -203,7 +205,7 @@ final class DeviceTransferClient implements Handler.Callback {
     int tries = 5;
     while ((tries--) > 0) {
       try {
-//        wifiDirect.connect(deviceAddress);
+        handler.obtainMessage(START_NETWORK_CLIENT, deviceAddress);
         update(TransferStatus.networkConnected());
         remotePort = port;
         return;

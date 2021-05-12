@@ -60,6 +60,7 @@ final class NetworkServerThread extends Thread {
     try {
       serverSocket = SelfSignedIdentity.getServerSocketFactory(keys).createServerSocket(0);
       handler.sendMessage(handler.obtainMessage(NETWORK_SERVER_STARTED, serverSocket.getLocalPort(), 0));
+      Log.i(TAG, String.format("Local port:%s", serverSocket.getLocalPort()));
       while (shouldKeepRunning() && !serverSocket.isClosed()) {
         Log.i(TAG, "Waiting for client socket accept...");
         try {

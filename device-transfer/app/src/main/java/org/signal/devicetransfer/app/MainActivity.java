@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
       DeviceToDeviceTransferService.startClient(this,
                                                 new ClientSendRandomBytes(),
                                                 ((EditText) findViewById(R.id.ip_address)).getText().toString(),
+                                                ((EditText) findViewById(R.id.ip_port)).getText().toString(),
                                                 data,
                                                 PendingIntent.getActivity(this,
                                                                           0,

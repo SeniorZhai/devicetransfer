@@ -37,12 +37,14 @@ public class DeviceToDeviceTransferService extends Service implements ShutdownCa
   private static final String EXTRA_NOTIFICATION   = "extra_notification_data";
   private static final String EXTRA_IS_VERIFIED    = "is_verified";
   private static final String EXTRA_IP_ADDRESS    = "ip_address";
+  private static final String EXTRA_IP_PORT    = "EXTRA_IP_PORT";
 
   private TransferNotificationData notificationData;
   private PendingIntent            pendingIntent;
   private DeviceTransferServer     server;
   private DeviceTransferClient     client;
   private String                   ipAddress;
+  private String                   ipPort;
 
   public static void startServer(@NonNull Context context,
                                  @NonNull ServerTask serverTask,
@@ -61,6 +63,7 @@ public class DeviceToDeviceTransferService extends Service implements ShutdownCa
   public static void startClient(@NonNull Context context,
                                  @NonNull ClientTask clientTask,
                                  @NonNull String ipAddress,
+                                 @NonNull String ipPort,
                                  @NonNull TransferNotificationData transferNotificationData,
                                  @Nullable PendingIntent pendingIntent)
   {
@@ -68,6 +71,7 @@ public class DeviceToDeviceTransferService extends Service implements ShutdownCa
     intent.setAction(ACTION_START_CLIENT)
           .putExtra(EXTRA_TASK, clientTask)
           .putExtra(EXTRA_IP_ADDRESS, ipAddress)
+          .putExtra(EXTRA_IP_PORT, ipPort)
           .putExtra(EXTRA_NOTIFICATION, transferNotificationData)
           .putExtra(EXTRA_PENDING_INTENT, pendingIntent);
 
@@ -149,9 +153,11 @@ public class DeviceToDeviceTransferService extends Service implements ShutdownCa
           notificationData = intent.getParcelableExtra(EXTRA_NOTIFICATION);
           pendingIntent    = intent.getParcelableExtra(EXTRA_PENDING_INTENT);
           ipAddress        = intent.getStringExtra(EXTRA_IP_ADDRESS);
+          ipPort        = intent.getStringExtra(EXTRA_IP_PORT);
           client           = new DeviceTransferClient(getApplicationContext(),
                                                       (ClientTask) Objects.requireNonNull(intent.getSerializableExtra(EXTRA_TASK)),
                                                       ipAddress,
+                                                      Integer.parseInt(ipPort),
                                                       this);
           client.start();
         } else {
